@@ -1,26 +1,20 @@
-import useGetCharacter from './hooks/useFecthCharacters';
+import useFetchCharacters from './hooks/useFetchCharacters.js';
+import Character from './components/Character';
 import './App.css';
 
 function App() {
-  const urlPokemon = 'https://pokeapi.co/api/v2/pokemon/1 ';
+  const urlPokemon = `https://pokeapi.co/api/v2/pokemon/1`;
   const urlRick = 'https://rickandmortyapi.com/api/character/1';
 
-  const { data: pokemon } = useGetCharacter(urlPokemon)
-  const { data: rick } = useGetCharacter(urlRick)
-
-  if (!pokemon || !rick) return <p>Cargando...</p>;
+  const {data: pokemon, error: errorPokemon, loading: loadingPokemon} = useFetchCharacters(urlPokemon)
+  const {data: rick, error: errorRick, loading: loadingRick} = useFetchCharacters(urlRick)
   
   return (
     <>
-      <h2>Personaje Pokemon</h2>
-      <p>{pokemon.name}</p>
-      <img src={pokemon.sprites?.other?.['official-artwork']?.front_default} alt={pokemon.name}  />
-
-      <h2>Personaje Rick and Morty</h2>
-      <p>{rick.name}</p>
-      <img src={rick.image} alt={rick.name} />
+    <Character character={pokemon} error={errorPokemon} loading={loadingPokemon} name={pokemon?.name} img={pokemon?.sprites?.front_default} />
+    <Character character={rick} error={errorRick} loading={loadingRick} name={rick?.name} img={rick?.image} />
     </>
-  );
+  )
 }
 
 export default App;
